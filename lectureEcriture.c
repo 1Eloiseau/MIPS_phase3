@@ -1,8 +1,8 @@
 #include "fonctions.h"
 
-//la ligne, l'instruction ou le label est formaté : supprime les commentaires, espaces, tabulations
+//l'instruction ou le label est formaté : supprime les commentaires, espaces, tabulations
 //ex : " 	ADD    $3  ,    $2,  $1 # commentaire  " devient "ADD $3,$2,$1" terminé par \0
-//renvoie 0 si la ligne est une instruction, 1 si label(ligne renvoyé avec le ":"), -1 si vide/commentaire
+//renvoie 0 si la ligne est une instruction, 1 si label(ligne renvoyé avec le ":"), -1 si vide/commentaire (ligne n'est pas modifié dans ce cas)
 int formaterLigne(char* ligne)
 {
 	int typeLigne = -1;
@@ -14,27 +14,32 @@ int formaterLigne(char* ligne)
 		i++;
 	}
 
-	while (ligne[i] != '\n' && ligne[i] != '\0' && ligne[i] != '#' && ligne[i] != ':') {
-		i_ligne[j] = i_ligne[i];
+	while (ligne[i] != '\r' && ligne[i] != '\n' && ligne[i] != '\0' && ligne[i] != '#' && ligne[i] != ':') {
+		i_ligne[j] = ligne[i];
+		//printf("i, j, i_l, l == %d - %d - %c - %c\n", i, j, i_ligne[i], ligne[j]);
 		i++;
 		j++;
+		
 		if(ligne[i] == ':') {
 			i_ligne[j] = ':';
 			typeLigne = 1; //la ligne est un label
+			j++;
 		}
 		if(ligne[i] == ' ' || ligne[i] == '\t') {
-			if(typeLigne == -1)
+			if(typeLigne == -1) {
 				i_ligne[j] = ' '; //on ajoute un espace après le nom d'instruction
+				j++;
+			}
 			typeLigne = 0;
 			while(ligne[i] == ' ' || ligne[i] == '\t') {
 				i++;
 			}
 		}
 	}
-	i_ligne[j+1] = '\0';
+	i_ligne[j] = '\0';
 	if(typeLigne != -1)
-		ligne = i_ligne;
-	
+		strcpy(ligne, i_ligne);
+
 	return typeLigne;
 }
 

@@ -18,10 +18,11 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 		printf("Erreur dans l'ouverture du fichier %s :(  Existe-t-il ?", nomFichierSource);
 	}
 
-	lireFichier(fichierSource, &tabLignes);
+	nbLignes = lireFichier(fichierSource, &tabLignes);
 	for (int i = 0; i < nbLignes; i++)
 	{
-		printf("%s \n", tabLignes[i]);
+		printf("type %d\n", formaterLigne(tabLignes[i]));
+		printf("formate : >%s< \n", tabLignes[i]);
 	}
 	
 	fclose(fichierSource);

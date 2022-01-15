@@ -10,6 +10,8 @@
 
 //PENSER A DECRIRE LES FONCTIONS ICI AVANT LE RENDU
 
+int formaterLigne(char* ligne);
+
 int lireFichier(FILE * fichier, char*** tabLignes);
 
 void ecrireLigneFichier(FILE * fichier, char donnees[]);
