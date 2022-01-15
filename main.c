@@ -5,7 +5,8 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	char* nomFichierDestination = argv[2];
 	char* nomFichierRegistres = argv[3]; //on y stocke la valeur des registres à la fin
 	char ligne[TAILLE_LIGNE];
-	char ligneHexa[9];
+	int tabRegistres[35]; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
+	char tabMemoire[1000]; //octets de mémoire gros-boutiste
 	int nbLignes = 0;
 	int typeLigne = -1;
 
