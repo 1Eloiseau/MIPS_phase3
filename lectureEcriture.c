@@ -1,9 +1,9 @@
 #include "fonctions.h"
 
-//la ligne, l'instruction ou le label est formatté : supprime les commentaires, espaces, tabulations
+//la ligne, l'instruction ou le label est formaté : supprime les commentaires, espaces, tabulations
 //ex : " 	ADD    $3  ,    $2,  $1 # commentaire  " devient "ADD $3,$2,$1" terminé par \0
 //renvoie 0 si la ligne est une instruction, 1 si label(ligne renvoyé avec le ":"), -1 si vide/commentaire
-int formatterLigne(char* ligne)
+int formaterLigne(char* ligne)
 {
 	int typeLigne = -1;
 	char i_ligne[TAILLE_LIGNE];
@@ -58,7 +58,7 @@ int lireFichier(FILE * fichier, char*** tabLignes) {
 
 //ecrit une ligne dans le fichier (gère le /n)
 //va à la ligne si on le l'est pas déjà
-void ecrireFichier(FILE * fichier, char donnees[]) {
+void ecrireLigneFichier(FILE * fichier, char donnees[]) {
 
 /*
 	char caractere = '\n';

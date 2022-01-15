@@ -6,7 +6,7 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	char* nomFichierRegistres = argv[3]; //on y stocke la valeur des registres à la fin
 	char ligne[TAILLE_LIGNE];
 	char ligneHexa[9];
-	int numeroLigne = 1;
+	int nbLignes = 0;
 	int typeLigne = -1;
 
 	char** tabLignes;
@@ -19,9 +19,11 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	}
 
 	lireFichier(fichierSource, &tabLignes);
-	printf("%s \n", tabLignes[0]); //affiche la ligne 0
-	printf("%s\n", tabLignes[1]);
-
+	for (int i = 0; i < nbLignes; i++)
+	{
+		printf("%s \n", tabLignes[i]);
+	}
+	
 	fclose(fichierSource);
 	fclose(fichierDestination);
 	free(tabLignes);

@@ -12,7 +12,7 @@
 
 int lireFichier(FILE * fichier, char*** tabLignes);
 
-void ecrireFichier(FILE * fichier, char donnees[]);
+void ecrireLigneFichier(FILE * fichier, char donnees[]);
 
 void intEnChar(int instruction, char ligneHexa[]);
 
