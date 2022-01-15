@@ -1,5 +1,5 @@
 #include "fonctions.h"
-
+/*
 //L est le tableau dans lequel le mot numero_mot sera stocké. Donc si on a ligne [] = 'ADD R0, R1, R2' et on écrit lecture_mot (ligne, L, 2), le mot R0 qui est le second mot sera stocké dans la variable L.
 void lecture_mot(char ligne[], char L[], int numero_mot) {  
     int i = 0;
@@ -609,3 +609,4 @@ void intEnChar(int instruction, char ligneHexa[]) {
 	}
     ligneHexa[8] = '\0';
 }
+*/

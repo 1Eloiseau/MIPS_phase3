@@ -9,10 +9,12 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	int numeroLigne = 1;
 	int etatLigne = 0;
 
+	char** tabLignes;
+
 	//Ouvrir un fichier en écriture efface tout son contenu, cela permet d'avoir un fichier out directement nettoyé pour éviter de devoir le faire à chaque fois.
 	FILE * fichierSource = fopen(nomFichierSource, "r");
 	FILE * fichierDestination = fopen(nomFichierDestination, "a+");
-
+/*
 	while ((etatLigne = lireLigneFichier(fichierSource, ligne, numeroLigne)) != -1) { // tant qu'il reste des lignes à lire
 		if(etatLigne == 1) {
 			
@@ -22,7 +24,13 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 		}
 		numeroLigne++;
 	}
+*/
+	lireFichier(fichierSource, &tabLignes);
+	printf("%s\n", tabLignes[0]);
+	printf("%s\n", tabLignes[1]);
+
 	fclose(fichierSource);
 	fclose(fichierDestination);
+	free(tabLignes);
 	return (0);
 }

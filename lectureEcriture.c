@@ -1,39 +1,39 @@
 #include "fonctions.h"
 
-//lit la ligne du fichier sans \n
-//retourne 1 si la ligne existe, 0 si elle est vide/commentaire, -1 sinon (fin du fichier)
-int lireLigneFichier(FILE * fichier, char ligne[], int numeroLigne) {
-	char i_ligne[TAILLE_LIGNE];
-	int i = 0;
-	int etatLigne = -1;
-	int j = 0;
-	int m = 0;
-	int test = 0;
+//Renvoit l'instruction ou le label formatté : supprime commentaires
+int formatterLigne()
+{
+	/*
+	while (i_ligne[j] == ' ') {
+		j += 1;
+	}
+	while (i_ligne[m] != '\n' && i_ligne[m] != '\0' && i_ligne[m] != '#' && i_ligne[m] != ':') {
+		m += 1;
+	}
+	if (i_ligne[j] == '#' || i_ligne[j] == '\n' || i_ligne[m] == ':' || i_ligne[j] == '\r' || i_ligne[j] == '\t') {
+		etatLigne = 0;
+	} else {
+		etatLigne = 1;
+	}
+	*/
+}
 
-	if(fgets(i_ligne, TAILLE_LIGNE, fichier) != NULL) { 
-		if(i == numeroLigne-1) {
-			
-			strcpy(ligne, i_ligne);
-			while (i_ligne[j] == ' ') {
-				j += 1;
-			}
-			while (i_ligne[m] != '\n' && i_ligne[m] != '\0' && i_ligne[m] != '#' && i_ligne[m] != ':') {
-				m += 1;
-			}
-			if (i_ligne[j] == '#' || i_ligne[j] == '\n' || i_ligne[m] == ':' || i_ligne[j] == '\r' || i_ligne[j] == '\t') {
-				etatLigne = 0;
-			} else {
-				etatLigne = 1;
-			}
-		}
-		i += 1;
+//lit le fichier et enregistre chaque ligne dans le tableau
+//renvoit le nombre de lignes lues
+int lireFichier(FILE * fichier, char*** tabLignes) {
+	int numLigne = 0;
+	char i_ligne[TAILLE_LIGNE];
+	char** i_tabLignes; //tabLignes interne/local
+
+	while(fgets(i_ligne, TAILLE_LIGNE, fichier) != NULL) {
+		i_tabLignes = (char**)realloc(i_tabLignes, (numLigne+1)*sizeof(char*));
+		i_tabLignes[numLigne] = (char*)malloc(100*sizeof(char));
+		strcpy(i_tabLignes[numLigne], i_ligne);
+		numLigne++;
 	}
-	//suppression du \n éventuel
-	if(etatLigne != -1) {
-		if(ligne[strlen(ligne)-1] == '\n')
-			ligne[strlen(ligne)-1] = 0;
-	}
-	return etatLigne;
+	*tabLignes = i_tabLignes;
+
+	return numLigne;
 }
 
 //ecrit une ligne dans le fichier (gère le /n)

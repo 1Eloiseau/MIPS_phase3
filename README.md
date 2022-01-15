@@ -1,1 +1,0 @@
-Pour lancer : make && ./emul-mips in1.s in1.hex in1.state
