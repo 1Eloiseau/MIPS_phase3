@@ -26,7 +26,7 @@ lang: fr
      S'il vaut -1, la ligne est un label
   4. La ligne est traduite puis écrite dans le .hex
   5. On passe à la ligne suivante
-
+* (Eloi) toutes mes variables locales de fonction(var) s'appellent i_var
 
 # Choix de traduction
 

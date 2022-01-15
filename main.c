@@ -7,26 +7,19 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	char ligne[TAILLE_LIGNE];
 	char ligneHexa[9];
 	int numeroLigne = 1;
-	int etatLigne = 0;
+	int typeLigne = -1;
 
 	char** tabLignes;
 
 	//Ouvrir un fichier en écriture efface tout son contenu, cela permet d'avoir un fichier out directement nettoyé pour éviter de devoir le faire à chaque fois.
 	FILE * fichierSource = fopen(nomFichierSource, "r");
 	FILE * fichierDestination = fopen(nomFichierDestination, "a+");
-/*
-	while ((etatLigne = lireLigneFichier(fichierSource, ligne, numeroLigne)) != -1) { // tant qu'il reste des lignes à lire
-		if(etatLigne == 1) {
-			
-			intEnChar(traduction_dec(ligne, fichierSource, numeroLigne), ligneHexa);
-			ecrireFichier(fichierDestination, ligneHexa);
-			printf("§\n");
-		}
-		numeroLigne++;
+	if(fichierSource == NULL) {
+		printf("Erreur dans l'ouverture du fichier %s :(  Existe-t-il ?", nomFichierSource);
 	}
-*/
+
 	lireFichier(fichierSource, &tabLignes);
-	printf("%s\n", tabLignes[0]);
+	printf("%s \n", tabLignes[0]); //affiche la ligne 0
 	printf("%s\n", tabLignes[1]);
 
 	fclose(fichierSource);
