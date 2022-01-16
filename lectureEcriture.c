@@ -2,17 +2,16 @@
 
 //rempli tabLabels (tabLabels.numInstruction est l'index en comptant les instructions et labels)
 //renvoie le nombre de labels (= la taille de tabLabels)
-int remplirTabLabels(FILE* fichier, structLabel** tabLabels) {
+int remplirTabLabels(FILE* fichier, structLabel* l_tabLabels) {
 	int nbLabels = 0;
 	int nbInstructions = 0;
 	int typeLigne;
 	char ligne[TAILLE_LIGNE];
-	structLabel* l_tabLabels = *tabLabels;
+
 
 	while(lireLigneFichier(fichier, ligne) != 1) {
 		typeLigne = formaterLigne(ligne); //on récupère la ligne et son type
 		if(typeLigne == 1) {
-			l_tabLabels = (structLabel*) realloc(l_tabLabels, (nbLabels+1) * sizeof(structLabel));
 			strcpy(l_tabLabels[nbLabels].label, ligne);
 			l_tabLabels[nbLabels].numInstruction = (nbLabels + nbInstructions);
 			nbLabels++;
@@ -20,9 +19,9 @@ int remplirTabLabels(FILE* fichier, structLabel** tabLabels) {
 		if(typeLigne == 0)
 			nbInstructions++;
 	}
-	*tabLabels = l_tabLabels;
-	rewind(fichier);
-		
+
+	rewind(fichier); //pointeur retourné au début
+
 	return (nbLabels);
 }
 

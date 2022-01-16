@@ -10,7 +10,7 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	char tabMemoire[1000]; //octets de mémoire gros-boutiste
 	int nbLignes = 0;
 	int typeLigne = -1;
-	structLabel* tabLabels = NULL; //tableau liant labels et leur positions
+	structLabel tabLabels[10]; //tableau liant labels et leur positions
 	char matriceCSV[26][10][15];
 	int i_ligne = 0;
 	int i_instruction = 0;
@@ -23,17 +23,26 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 		printf("Erreur dans l'ouverture du fichier %s :(  Existe-t-il ?\n", nomFichierSource);
 	}
 
-	int nbLabels = remplirTabLabels(fichierSource, &tabLabels);
+	int nbLabels = remplirTabLabels(fichierSource, tabLabels);
 	printf("§\n");
 
 	lecture_csv(matriceCSV);
 	printf("§\n");
 
+	/*
 	while(lireLigneFichier(fichierSource, ligne) != 1) {
-		intEnChar(traduction_dec(ligne, i_ligne, tabLabels, matriceCSV), ligneHexa);
-		ecrireLigneFichier(fichierSource, ligneHexa);
-		printf("i_ligne:%d i_instruction:%d ligne:%s ligneHexa:%s\n", i_ligne, i_instruction, ligne, ligneHexa);
+		if(formaterLigne(ligne) == 0) { //ligne est une instruction
+			intEnChar(traduction_dec(ligne, i_instruction, tabLabels, matriceCSV), ligneHexa);
+			ecrireLigneFichier(fichierDestination, ligneHexa);
+			printf("i_ligne:%d i_instruction:%d ligne:%s ligneHexa:%s\n", i_ligne, i_instruction, ligne, ligneHexa);
+		}
 		i_ligne++;
+	}
+	*/
+	//affiche les lignes de tabLabels
+	for (int i = 0; i < nbLabels; i++)
+	{
+		printf("%s %d\n", tabLabels[i].label, tabLabels[i].numInstruction);
 	}
 	
 /* //affiche les lignes et leur type

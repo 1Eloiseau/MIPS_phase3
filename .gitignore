@@ -1,0 +1,4 @@
+emul-mips
+*.o
+*.hex
+*.state

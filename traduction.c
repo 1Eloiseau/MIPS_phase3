@@ -139,13 +139,12 @@ void parentheses (char base1[], char base2[], char mot[]) {
 }
 
 //Retourne le numéro de ligne du label recherché.
-int offset_label(structLabel matrice_label[], char label[100]) {
+int offset_label(structLabel matrice_label[], char label[100], int nb_label) {
     int get_out = 0;
     int num_label = 0;
     int pos_label = -1;
-    int taille_matrice = sizeof(matrice_label);
 
-    while (num_label < taille_matrice && get_out != 1){
+    while (num_label < nb_label && get_out != 1){
         if (!strcmp(matrice_label[num_label].label, label)) {
             get_out = 1;
             pos_label = matrice_label[num_label].numInstruction;
@@ -190,7 +189,7 @@ void intEnChar(int instruction, char ligneHexa[]) {
 /*Puis à décalage de décaler en fonction des informations stocker dans matrice_csv*/
 /*Puis effectue un ou binaire entre chaque variable et le masque, lui aussi stocké dans matrice_csv*/
 /*Puis retourne le résultat*/
-int string_to_int (char operation[4][100], char matrice_csv[26][10][15], int ligne_matrice_csv, int num_inst, char * matrice_label[2]) {
+int string_to_int (char operation[4][100], char matrice_csv[26][10][15], int ligne_matrice_csv, int num_inst, char * matrice_label[2], int nb_label) {
     int inst_decimal = matrice_csv[ligne_matrice_csv][1];
     int variable1 = 0;
     int variable2 = 0;
@@ -254,7 +253,7 @@ int string_to_int (char operation[4][100], char matrice_csv[26][10][15], int lig
     } else if (type_op == -1) {
         return (-1);
     } else if (type_op == 9) {
-        variable1 = offset_label(matrice_label, operation[1]);
+        variable1 = offset_label(matrice_label, operation[1], nb_label);
 
         if (num_inst < variable1) {
             variable1 = (num_inst - variable1 + 1) * 4;;
@@ -276,7 +275,7 @@ int string_to_int (char operation[4][100], char matrice_csv[26][10][15], int lig
     return (inst_decimal);
 }
 
-int traduction_dec(char ligne[], int num_instruction, structLabel matrice_label[],char matrice_csv[26][10][15]) {
+int traduction_dec(char ligne[], int num_instruction, structLabel matrice_label[],char matrice_csv[26][10][15], int nb_label) {
     char mot_ligne[4][100];
     int type_op = 0;
     int ligne_csv = -1;
@@ -292,7 +291,7 @@ int traduction_dec(char ligne[], int num_instruction, structLabel matrice_label[
         }
     }
 
-    inst_dec = string_to_int(mot_ligne, matrice_csv, ligne_csv, num_instruction, matrice_label);
+    inst_dec = string_to_int(mot_ligne, matrice_csv, ligne_csv, num_instruction, matrice_label, nb_label);
     
     if (inst_dec == -1) {
         printf("Erreur à l'instruction n°%d", num_instruction);

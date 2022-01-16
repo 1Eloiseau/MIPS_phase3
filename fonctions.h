@@ -16,7 +16,7 @@ typedef struct structLabel structLabel;
 
 //PENSER A DECRIRE LES FONCTIONS ICI AVANT LE RENDU
 
-int remplirTabLabels(FILE* fichier, structLabel** tabLablels);
+int remplirTabLabels(FILE* fichier, structLabel* tabLablels);
 
 void lecture_csv(char matrice[26][10][15]);
 
@@ -28,6 +28,6 @@ void ecrireLigneFichier(FILE * fichier, char donnees[]);
 
 void intEnChar(int instruction, char ligneHexa[]);
 
-int traduction_dec(char ligne[], int num_instruction, structLabel matrice_label[],char matrice_csv[26][10][15]);
+//int traduction_dec(char ligne[], int num_instruction, structLabel matrice_label[],char matrice_csv[26][10][15]);
 
 #endif
