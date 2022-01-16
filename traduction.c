@@ -148,7 +148,7 @@ int offset_label(structLabel matrice_label[], char label[100]) {
     while (num_label < taille_matrice && get_out != 1){
         if (!strcmp(matrice_label[num_label].label, label)) {
             get_out = 1;
-            pos_label = matrice_label[num_label].num_instruction;
+            pos_label = matrice_label[num_label].numInstruction;
         } 
     }
     return (pos_label);

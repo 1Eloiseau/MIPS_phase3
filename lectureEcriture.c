@@ -15,13 +15,14 @@ int remplirTabLabels(FILE* fichier, structLabel** tabLabels) {
 			l_tabLabels = (structLabel*) realloc(l_tabLabels, (nbLabels+1) * sizeof(structLabel));
 			strcpy(l_tabLabels[nbLabels].label, ligne);
 			l_tabLabels[nbLabels].numInstruction = (nbLabels + nbInstructions);
-			printf("%d %s %d\n", nbLabels, l_tabLabels[nbLabels].label, l_tabLabels[nbLabels].numInstruction);
 			nbLabels++;
 		}
 		if(typeLigne == 0)
 			nbInstructions++;
 	}
 	*tabLabels = l_tabLabels;
+	rewind(fichier);
+		
 	return (nbLabels);
 }
 
@@ -90,4 +91,32 @@ void ecrireLigneFichier(FILE * fichier, char donnees[]) {
 
 	fputs(donnees, fichier); //ajoute la chaine à la fin du fichier
 	fputs("\n", fichier);
+}
+
+/*Lis le fichier Valeurs.csv et mets l'ensemble de son contenu dans une matrice à 3 dimensions*/
+void lecture_csv(char matrice[26][10][15]) {
+
+    FILE * fichier = fopen("val2.csv", "rt");
+    char ligne[50];
+    int num_ligne = 0;
+    int pos_loc = 0;
+    int indice_ligne = 0;
+    int num_mot = 0;
+    while (fgets(ligne, 50, fichier) != NULL)  {
+        while (ligne[indice_ligne] != '\0') {
+            while (ligne[indice_ligne] != ';' && ligne[indice_ligne] != '\0') {
+                matrice[num_ligne][num_mot][pos_loc] = ligne[indice_ligne];
+                indice_ligne += 1;
+                pos_loc += 1;
+            }
+            matrice[num_ligne][num_mot][pos_loc] = '\0';
+            indice_ligne += 1;
+            pos_loc = 0;
+            num_mot += 1;
+        }
+        num_ligne += 1;
+        num_mot = 0;
+        indice_ligne = 0;
+    }
+    fclose(fichier);
 }
