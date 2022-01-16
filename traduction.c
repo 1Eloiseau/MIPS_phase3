@@ -1,31 +1,32 @@
 #include "fonctions.h"
-/*
+
 //L est le tableau dans lequel le mot numero_mot sera stocké. Donc si on a ligne [] = 'ADD R0, R1, R2' et on écrit lecture_mot (ligne, L, 2), le mot R0 qui est le second mot sera stocké dans la variable L.
-void lecture_mot(char ligne[], char L[], int numero_mot) {  
+
+void lecture_mot(char ligne[], char L[4][100]) {
     int i = 0;
     int j = 0;
+    int k = 0;
+    int num_mot = 4;
+    char temp[100];
+
     while (ligne[i] == ' ') {
         i += 1;
     }
-
-    while (numero_mot != 1) {
-        while (ligne[i] != ' ' && ligne[i] != ',') {
+    while (num_mot != 0 && ligne[i] != '\0' && ligne[i] != '#' && ligne[i] != ':') {
+        while (ligne[i] != ' ' && ligne[i] != '\0' && ligne[i] != '#' && ligne[i] != ',' && ligne[i] != ':' && ligne[i] != '\r' && ligne[i] != '\t') {
+            temp[k] = ligne[i];
             i += 1;
+            k += 1;
         }
-        while (ligne[i] == ' ' || ligne[i] == ',') {
-            i += 1;
-        }
-        numero_mot -= 1;
-    }
-
-
-    while (ligne[i] != ' ' && ligne[i] != '\0' && ligne[i] != '#' && ligne[i] != ',' && ligne[i] != ':' && ligne[i] != '\r' && ligne[i] != '\t') {
-        L[j] = ligne[i];
-        i += 1;
+        temp[k] = '\0';
+        strcpy(L[j], temp);
+        k = 0;
         j += 1;
+        num_mot -= 1;
+        while (ligne[i] == ' ' || ligne[i] == ',' || ligne[i] == '\r' || ligne[i] == '\t') {
+            i += 1;
+        }
     }
-    L[j] = '\0';
-
 }
 
 //Regarde la chaîne de caractère contenue dans mot qui doit représenter un registre et retourne le numéro de ce registre
@@ -109,36 +110,11 @@ int puissance(int a, int p) {
     return (b);
 }
 
-//Retourne la valeur décimale d'une chaine de caractère, exemple : valeurDecimale('2021') = 2021 (entier). 
-int valeurDecimale (char S[]) {
-    int i = 0;
-    int n = strlen(S);
-    int rang = puissance(10, n-1);
-    int nbr = 0;
-    int chiffre;
-
-    if(S[0]=='-') {
-        i++;
-        rang/=10;
-    }
-    while (S[i] != '\0') {
-        chiffre = S[i] - 48;
-        nbr += rang * chiffre;
-        rang /= 10;
-        i += 1;
-    }
-    if(S[0]=='-') {
-        nbr = -nbr;
-    }
-    return (nbr);
-}
-
-//Retourne un tableau contenant dans le premier élément les caractères hors parenthèse et en second élément celui dans les parenthèses. Si par exemple c'et écrit a0(4), le tableau offset sera base[0] = a0 et base[1]=4. S'il n'y a pas de décalage alors le 2nd élément du tableau sera une chaîne de caractères vide. 
+/*Retourne un tableau contenant dans le premier élément les caractères hors parenthèse et en second élément celui dans les parenthèses.*/
+/*Si par exemple c'et écrit a0(4), le tableau offset sera base[0] = a0 et base[1]=4. S'il n'y a pas de décalage alors le 2nd élément du tableau sera une chaîne de caractères vide.*/
 void parentheses (char base1[], char base2[], char mot[]) {
     char mot_temp1[TAILLE_LIGNE];
     char mot_temp2[TAILLE_LIGNE];
-    // strcpy(mot_temp1, mot);
-    // strcpy(mot_temp2, mot);
     int i = 0;
     int j = 0;
 
@@ -162,443 +138,38 @@ void parentheses (char base1[], char base2[], char mot[]) {
     strcpy(base2, mot_temp2);
 }
 
-//Prend en entrée une ligne à traduire et retourne la valeur décimale de l'instruction.
-int traduction_dec (char ligne[], FILE * fichier_source, int numero_ligne) {
-    char operation[8];
-    int inst_decimal;
-    int variable1; //le type short est indispensable pour le complément à 2 16 bits
-    int variable2;
-    int variable3;
-    char label[100];
-    char string_temp1[TAILLE_LIGNE];
-    char string_temp2[TAILLE_LIGNE];
-    char string_temp3[TAILLE_LIGNE];
-
-    lecture_mot(ligne, operation, 1);
-
-    if (!strcmp(operation, "ADD")) {
-        inst_decimal = 32;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = numero_registre(string_temp3);
-
-        variable1 = variable1 << 11;
-        variable2 = variable2 << 21;
-        variable3 = variable3 << 16;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-
-    } else if (!strcmp(operation, "AND")) {
-        inst_decimal = 36;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = numero_registre(string_temp3);
-
-        variable1 = variable1 << 11;
-        variable2 = variable2 << 21;
-        variable3 = variable3 << 16;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-
-    } else if (!strcmp(operation, "DIV")) {
-        inst_decimal = 26;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-
-        variable1 = variable1 << 21;
-        variable2 = variable2 << 16;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-    } else if (!strcmp(operation, "JR")) {
-        inst_decimal = 8;
-
-        lecture_mot(ligne, string_temp1, 2);
-
-        variable1 = numero_registre(string_temp1);
-
-        variable1 = variable1 << 21;
-
-        inst_decimal = inst_decimal | variable1;
-    } else if (!strcmp(operation, "MFHI")) {
-        inst_decimal = 16;
-
-        lecture_mot(ligne, string_temp1, 2);
-
-        variable1 = numero_registre(string_temp1);
-
-        variable1 = variable1 << 11;
-
-        inst_decimal = inst_decimal | variable1;
-    } else if (!strcmp(operation, "MFLO")) {
-        inst_decimal = 18;
-
-        lecture_mot(ligne, string_temp1, 2);
-
-        variable1 = numero_registre(string_temp1);
-
-        variable1 = variable1 << 11;
-
-        inst_decimal = inst_decimal | variable1;
-    } else if (!strcmp(operation, "MULT")) {
-        inst_decimal = 24;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-
-        variable1 = variable1 << 21;
-        variable2 = variable2 << 16;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-
-    } else if (!strcmp(operation, "NOP")) {
-        inst_decimal = 0;
-    } else if (!strcmp(operation, "OR")) {
-        inst_decimal = 37;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = numero_registre(string_temp3);
-
-
-        variable1 = variable1 << 11;
-        variable2 = variable2 << 21;
-        variable3 = variable3 << 16;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "ROTR")) {
-        inst_decimal = 2097154;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = valeurDecimale(string_temp3);
-
-        variable1 = variable1 << 11;
-        variable2 = variable2 << 16;
-        variable3 = variable3 << 6;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "SLL")) {
-        inst_decimal = 0;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = valeurDecimale(string_temp3);
-
-        variable1 = variable1 << 11;
-        variable2 = variable2 << 16;
-        variable3 = variable3 << 6;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "SLT")) {
-        inst_decimal = 42;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = numero_registre(string_temp3);
-
-        variable1 = variable1 << 11;
-        variable2 = variable2 << 21;
-        variable3 = variable3 << 16;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "SRL")) {
-        inst_decimal = 2;
-        
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = valeurDecimale(string_temp3);
-
-        variable1 = variable1 << 11;
-        variable2 = variable2 << 16;
-        variable3 = variable3 << 6;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "SUB")) {
-        inst_decimal = 34;
-       
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = numero_registre(string_temp3);
-
-        variable1 = variable1 << 11;
-        variable2 = variable2 << 21;
-        variable3 = variable3 << 16;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "SYSCALL")) {
-        inst_decimal = 12;
-    } else if (!strcmp(operation, "XOR")) {
-        inst_decimal = 38;
-        
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = numero_registre(string_temp3);
-
-        variable1 = variable1 << 11;
-        variable2 = variable2 << 21;
-        variable3 = variable3 << 16;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "ADDI")) {
-        inst_decimal = 536870912;
-        
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = valeurDecimale(string_temp3);
-
-        variable1 = variable1 << 16;
-        variable2 = variable2 << 21;
-        variable3 = variable3 & 0x0000FFFF; //int->short int (pour complement à 2 sur 16 bits)
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "BEQ")) {
-        inst_decimal = 268435456;
-        
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = valeurDecimale(string_temp3);
-
-        variable1 = variable1 << 21;
-        variable2 = variable2 << 16;
-        variable3 = variable3 & 0x0000FFFF; //int->short int (pour complement à 2 sur 16 bits)
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "BGTZ")) {
-        inst_decimal = 469762048;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = valeurDecimale(string_temp2);
-
-        variable1 = variable1 << 21;
-        variable2 = variable2 & 0x0000FFFF; //int->short int (pour complement à 2 sur 16 bits)
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-    } else if (!strcmp(operation, "BLEZ")) {
-        inst_decimal = 402653184;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = valeurDecimale(string_temp2);
-
-        variable1 = variable1 << 21;
-        variable2 = variable2 & 0x0000FFFF; //int->short int (pour complement à 2 sur 16 bits)
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-    } else if (!strcmp(operation, "BNE")) {
-        inst_decimal = 335544320;
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-        lecture_mot(ligne, string_temp3, 4);
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = numero_registre(string_temp2);
-        variable3 = valeurDecimale(string_temp3);
-
-        variable1 = variable1 << 21;
-        variable2 = variable2 << 16;
-        variable3 = variable3 & 0x0000FFFF; //int->short int (pour complement à 2 sur 16 bits)
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "J")) {
-        inst_decimal = 134217728;
-
-        lecture_mot(ligne, string_temp1, 2);
-
-        variable1 = offsetLabel(ligne, fichier_source, string_temp1);
-
-        if (numero_ligne < variable1) {
-            variable1 = (numero_ligne - variable1 + 1) * 4;;
-        } else {
-            variable1 = (numero_ligne - variable1 - 1) * 4;
-        }
-
-        inst_decimal = inst_decimal | variable1;
-    } else if (!strcmp(operation, "JAL")) {
-        inst_decimal = 201326592;
-
-        lecture_mot(ligne, string_temp1, 2);
-
-        variable1 = offsetLabel(ligne, fichier_source, string_temp1);
-
-        if (numero_ligne < variable1) {
-            variable1 = (numero_ligne - variable1 + 1) * 4;;
-        } else {
-            variable1 = (numero_ligne - variable1 - 1) * 4;
-        }
-
-        inst_decimal = inst_decimal | variable1;
-    } else if (!strcmp(operation, "LUI")) {
-        inst_decimal = 1006632960;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-
-
-        variable1 = numero_registre(string_temp1);
-        variable2 = valeurDecimale(string_temp2);
-
-        variable1 = variable1 << 16;
-        variable2 = variable2 & 0x0000FFFF; //int->short int (pour complement à 2 sur 16 bits)
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-    } else if (!strcmp(operation, "LW")) {
-        inst_decimal = 2348810240;
-
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-
-        variable1 = numero_registre(string_temp1);
-
-        parentheses(label, string_temp3, string_temp2);
-
-        if (string_temp3[0] == '$') {
-            variable3 = numero_registre(string_temp3);
-        } else {
-            variable3 = valeurDecimale(string_temp3);
-        }
-
-        variable2 = valeurDecimale(label);
-
-        variable1 = variable1 << 16;
-        variable2 = variable2 & 0x0000FFFF; //int->short int (pour complement à 2 sur 16 bits)
-        variable3 = variable3 << 21;
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
-    } else if (!strcmp(operation, "SW")) {
-        inst_decimal = 2885681152;
-        lecture_mot(ligne, string_temp1, 2);
-        lecture_mot(ligne, string_temp2, 3);
-
-        variable1 = numero_registre(string_temp1);
-
-        parentheses(label, string_temp3, string_temp2);
-
-        variable3 = valeurDecimale(label);
-
-        if (string_temp3[0] == '$') {
-            variable2 = numero_registre(string_temp3);
-        } else {
-            variable2 = valeurDecimale(string_temp3);
-        }
-
-        variable1 = variable1 << 16;
-        variable2 = variable2 << 21;
-        variable3 = variable3 & 0x0000FFFF; //int->short int (pour complement à 2 sur 16 bits)
-
-        inst_decimal = inst_decimal | variable1;
-        inst_decimal = inst_decimal | variable2;
-        inst_decimal = inst_decimal | variable3;
+//Retourne le numéro de ligne du label recherché.
+int offset_label(structLabel matrice_label[], char label[100]) {
+    int get_out = 0;
+    int num_label = 0;
+    int pos_label = -1;
+    int taille_matrice = sizeof(matrice_label);
+
+    while (num_label < taille_matrice && get_out != 1){
+        if (!strcmp(matrice_label[num_label].label, label)) {
+            get_out = 1;
+            pos_label = matrice_label[num_label].num_instruction;
+        } 
     }
+    return (pos_label);
+}
 
-    return (inst_decimal);
+/*Prend en entrée un nombre de bits et une variable et retourne cette variable décalée binairement du nombre de bits*/
+/*Par exemple si on rendre 2 = "10" et qu'on demande un décalage de 4 bits, la fonction retourne 32 = "100000"*/
+int decalage(int var, int num_bit) {
+    return (var << num_bit);
+}
+
+/*Prend en entrée une variable et un nombre de bits, si par hasard, le nombre de trop grand, il sera réduit*/
+/*Par exemple, si on rentre 10 = "1010" et que le nombre de bits max est 3, la fonction renverra 2 = "010*/
+int houla_ca_deborde(int variable, int nbr_bit) {
+    int i = puissance(2, nbr_bit) - 1;
+    return (variable & i);
 }
 
 //Transforme un int en chaine de caractère hexa (de 8 caractères)
 void intEnChar(int instruction, char ligneHexa[]) {
-	const char hexa[] = "0123456789abcdef";
+	const char hexa[] = "0123456789ABCDEF";
 	short aConvertir; //nombre sur 4bits à convertir en 1 caractere hexa
 
 	for (int i = 0; i < 8; i += 1)
@@ -609,4 +180,124 @@ void intEnChar(int instruction, char ligneHexa[]) {
 	}
     ligneHexa[8] = '\0';
 }
-*/
+
+/*Prenons pas exemple l'instruction ADDI $2, $zero; 5, chaque mot de cette instruction sont dans operation*/
+/*ligne_matrice instruction est la ligne à laquelle l'instruction ADDI se trouve dans la matrice csv*/
+/*Grâce à cela, on connait le type d'instruction, ADDI est une instruction de type 2*/
+/*C'est-à-dire qu'il y a 2 registres et un entier*/
+/*La fonction va demander à numero_registre de traduire $2 et $zero et à atoi 5*/
+/*Puis va demander à houla_ca_deborde de faire ne sorte que ça ne déborde pas en fonction des infos dans matrice_csv*/
+/*Puis à décalage de décaler en fonction des informations stocker dans matrice_csv*/
+/*Puis effectue un ou binaire entre chaque variable et le masque, lui aussi stocké dans matrice_csv*/
+/*Puis retourne le résultat*/
+int string_to_int (char operation[4][100], char matrice_csv[26][10][15], int ligne_matrice_csv, int num_inst, char * matrice_label[2]) {
+    int inst_decimal = matrice_csv[ligne_matrice_csv][1];
+    int variable1 = 0;
+    int variable2 = 0;
+    int variable3 = 0;
+    char label[100];
+    int type_op = atoi(matrice_csv[ligne_matrice_csv][9]);
+
+    if (type_op == 1) {
+
+        variable1 = numero_registre(operation[1]);
+        variable2 = numero_registre(operation[2]);
+        variable3 = numero_registre(operation[3]);
+
+    } else if (type_op == 5) {
+
+        variable1 = numero_registre(operation[1]);
+        variable2 = numero_registre(operation[2]);
+
+    } else if (type_op == 4) {
+
+        variable1 = numero_registre(operation[1]);
+
+    } else if (type_op == 6) {
+    } else if (type_op == 2) {
+
+        variable1 = numero_registre(operation[1]);
+        variable2 = numero_registre(operation[2]);
+        variable3 = atoi(operation[3]);
+
+    } else if (type_op == 3) {
+
+        variable1 = numero_registre(operation[1]);
+        variable2 = atoi(operation[2]);
+
+    } else if (type_op == 7) {
+
+        variable1 = numero_registre(operation[1]);
+
+        parentheses(label, operation[3], operation[2]);
+
+        if (operation[3][0] == '$') {
+            variable3 = numero_registre(operation[3]);
+        } else {
+            variable3 = atoi(operation[3]);
+        }
+
+        variable2 = atoi(operation[2]);
+    } else if (type_op == 8) {
+
+        variable1 = numero_registre(operation[1]);
+
+        parentheses(label, operation[2], operation[2]);
+
+        variable3 = atoi(label);
+
+        if (operation[3][0] == '$') {
+            variable2 = numero_registre(operation[3]);
+        } else {
+            variable2 = atoi(operation[3]);
+        }
+    } else if (type_op == -1) {
+        return (-1);
+    } else if (type_op == 9) {
+        variable1 = offset_label(matrice_label, operation[1]);
+
+        if (num_inst < variable1) {
+            variable1 = (num_inst - variable1 + 1) * 4;;
+        } else {
+            variable1 = (num_inst - variable1 - 1) * 4;
+        }
+    }
+
+    houla_ca_deborde(variable1, matrice_csv[ligne_matrice_csv][6]);
+    houla_ca_deborde(variable2, matrice_csv[ligne_matrice_csv][7]);
+    houla_ca_deborde(variable3, matrice_csv[ligne_matrice_csv][8]);
+
+    variable1 = decalage(variable1, matrice_csv[ligne_matrice_csv][2]);
+    variable2 = decalage(variable2, matrice_csv[ligne_matrice_csv][3]);
+    variable3 = decalage(variable3, matrice_csv[ligne_matrice_csv][4]);
+
+    inst_decimal = inst_decimal | variable1 | variable2 | variable3;
+
+    return (inst_decimal);
+}
+
+int traduction_dec(char ligne[], int num_instruction, structLabel matrice_label[],char matrice_csv[26][10][15]) {
+    char mot_ligne[4][100];
+    int type_op = 0;
+    int ligne_csv = -1;
+    int get_out = 0;
+    int inst_dec;
+
+    lecture_mot(ligne, mot_ligne);
+
+    while (ligne_csv <= 26 && get_out != 1) {
+        ligne_csv += 1;
+        if (!strcmp(mot_ligne[0], matrice_csv[ligne_csv][0])) {
+            get_out = 1;
+        }
+    }
+
+    inst_dec = string_to_int(mot_ligne, matrice_csv, ligne_csv, num_instruction, matrice_label);
+    
+    if (inst_dec == -1) {
+        printf("Erreur à l'instruction n°%d", num_instruction);
+        return(-1);
+    }
+
+    return (inst_dec);
+}
