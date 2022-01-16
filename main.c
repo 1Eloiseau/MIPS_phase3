@@ -10,7 +10,8 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	int nbLignes = 0;
 	int typeLigne = -1;
 
-	char** tabLignes;
+	structLabel* tabLabels = NULL;
+	//FAIRE une fonction qui rempli tabLabels !!
 
 	//Ouvrir un fichier en écriture efface tout son contenu, cela permet d'avoir un fichier out directement nettoyé pour éviter de devoir le faire à chaque fois.
 	FILE * fichierSource = fopen(nomFichierSource, "r");
@@ -19,15 +20,21 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 		printf("Erreur dans l'ouverture du fichier %s :(  Existe-t-il ?", nomFichierSource);
 	}
 
-	nbLignes = lireFichier(fichierSource, &tabLignes);
-	for (int i = 0; i < nbLignes; i++)
+	int nb = remplirTabLabels(fichierSource, &tabLabels);
+	printf("%d\n", nb);
+	printf("%s %d \n", tabLabels[0].label, tabLabels[0].numInstruction);
+	for (int i = 0; i < nb; i++)
 	{
-		printf("type %d\n", formaterLigne(tabLignes[i]));
-		printf("formate : >%s< \n", tabLignes[i]);
+		printf("%s %d \n", tabLabels[i].label, tabLabels[i].numInstruction);
+	}
+	
+
+	while(lireLigneFichier(fichierSource, ligne) == 0) {
+		printf("type %d\n", formaterLigne(ligne));
+		printf("formate : >%s< \n", ligne);
 	}
 	
 	fclose(fichierSource);
 	fclose(fichierDestination);
-	free(tabLignes);
 	return (0);
 }

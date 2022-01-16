@@ -8,11 +8,19 @@
 #include <string.h>
 #include <stdbool.h>
 
+typedef struct structLabel structLabel;
+    struct structLabel{
+        char label[100];
+        int numInstruction; //numéro en comptant les instructions et les labels
+    };
+
 //PENSER A DECRIRE LES FONCTIONS ICI AVANT LE RENDU
+
+int remplirTabLabels(FILE* fichier, structLabel** tabLablels);
 
 int formaterLigne(char* ligne);
 
-int lireFichier(FILE * fichier, char*** tabLignes);
+int lireLigneFichier(FILE * fichier, char* ligne);
 
 void ecrireLigneFichier(FILE * fichier, char donnees[]);
 
