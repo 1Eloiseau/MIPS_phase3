@@ -18,7 +18,8 @@ typedef struct structLabel structLabel;
     };
 
 //PENSER A DECRIRE LES FONCTIONS ICI AVANT LE RENDU
-
+void afficherRegistres();
+void afficherMemoire();
 void ecrireFichierState(char nomFichier[]);
 
 int remplirTabLabels(FILE* fichier, structLabel* tabLablels);

@@ -52,6 +52,7 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 		printf("formate : >%s< \n", ligne);
 	}
 */
+	afficherRegistres();
 	if(i_instruction == 0)
 		printf("Aucune instruction écrite\n");
 	else

@@ -122,10 +122,20 @@ void lecture_csv(char matrice[26][10][15]) {
 
 //affiche les registres sur le terminal
 void afficherRegistres() {
-	for (char i = 0; i < 35; i++)
-	{
+	char nomReg[10];
+	printf("VALEUR DES REGISTRES :\n");
+	for (char i = 0; i < 6; i++) {
+		for (char i = 0; i < 4; i++) {
+			nomRegistre(nomReg, i);
+			printf("%s %d    ", nomReg, lireRegistre(i));
+		}
 		printf("\n");
 	}
+	for (char i = 32; i < 35; i++) {
+		nomRegistre(nomReg, i);
+		printf("%s %d   ", nomReg, lireRegistre(i));
+	}
+	printf("\n");
 }
 
 //affiche la mémoire sur le terminal
