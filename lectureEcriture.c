@@ -158,11 +158,12 @@ void ecrireFichierState(char nomFichier[]) {
 //affiche les registres sur le terminal
 void afficherRegistres() {
 	char nomReg[10];
+	int nbColonnes = 4;
 	printf("VALEUR DES REGISTRES :\n");
 	for (char i = 0; i < 6; i++) {
-		for (char i = 0; i < 4; i++) {
-			nomRegistre(nomReg, i);
-			printf("%s %d    ", nomReg, lireRegistre(i));
+		for (char j = 0; j < nbColonnes; j++) {
+			nomRegistre(nomReg, i*nbColonnes+j);
+			printf("%s %d    ", nomReg, lireRegistre(i*nbColonnes+j));
 		}
 		printf("\n");
 	}
