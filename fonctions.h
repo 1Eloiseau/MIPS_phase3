@@ -8,6 +8,9 @@
 #include <string.h>
 #include <stdbool.h>
 
+extern int tabRegistres[35]; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
+extern char tabMemoire[1000]; //octets de mémoire gros-boutiste
+
 typedef struct structLabel structLabel;
     struct structLabel{
         char label[100];

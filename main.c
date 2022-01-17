@@ -1,6 +1,6 @@
 #include "fonctions.h"
-int tabRegistres[35]; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
-char tabMemoire[1000]; //octets de mémoire gros-boutiste
+int tabRegistres[35] = {0}; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
+char tabMemoire[1000] = {0}; //octets de mémoire gros-boutiste
 
 int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par exemple
 	char* nomFichierSource = argv[1];
@@ -52,7 +52,11 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 		printf("formate : >%s< \n", ligne);
 	}
 */
-	printf("%d instructions écrites avec succès !", i_instruction);
+	if(i_instruction == 0)
+		printf("Aucune instruction écrite\n");
+	else
+		printf("%d instructions écrites avec succès !\n", i_instruction);
+    
 	fclose(fichierSource);
 	fclose(fichierDestination);
 	return (0);

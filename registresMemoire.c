@@ -1,6 +1,5 @@
 #include "fonctions.h"
-extern int tabRegistres[35]; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
-extern char tabMemoire[1000]; //octets de mémoire gros-boutiste
+
 
 void ecrire_registre(int registres[], int num_registre, int var) {
     int var_temp;

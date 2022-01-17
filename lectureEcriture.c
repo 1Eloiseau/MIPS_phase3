@@ -1,6 +1,5 @@
 #include "fonctions.h"
-extern int tabRegistres[35]; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
-extern char tabMemoire[1000]; //octets de mémoire gros-boutiste
+
 
 //rempli tabLabels (tabLabels.numInstruction est l'index en comptant les instructions et labels)
 //renvoie le nombre de labels (= la taille de tabLabels)
@@ -87,9 +86,8 @@ int lireLigneFichier(FILE * fichier, char* ligne) {
 	return etatLigne;
 }
 
-//ecrit une ligne dans le fichier (avec un /n)
+//ecrit une ligne dans le fichier (ajoute un /n)
 void ecrireLigneFichier(FILE * fichier, char donnees[]) {
-
 	fputs(donnees, fichier); //ajoute la chaine à la fin du fichier
 	fputs("\n", fichier);
 }
@@ -122,32 +120,51 @@ void lecture_csv(char matrice[26][10][15]) {
     fclose(fichier);
 }
 
+//affiche les registres sur le terminal
+void afficherRegistres() {
+	for (char i = 0; i < 35; i++)
+	{
+		printf("\n");
+	}
+}
+
+//affiche la mémoire sur le terminal
+void afficherMemoire() {
+
+}
+
+//retourne dans le tableau le nom du registre ($01: ou LI: par exemple)
+void nomRegistre(char nomRetourne[], int numRegistre) {
+	char reg[4];
+	if(numRegistre < 32) {
+		strcpy(nomRetourne, "$");
+		sprintf(reg, "%02d", numRegistre); //int to string
+		strcat(nomRetourne, reg); //concaténation
+	}
+	else if(numRegistre == 32) 
+		strcpy(nomRetourne, "PC");
+	else if(numRegistre == 33)
+		strcpy(nomRetourne, "HI");
+	else
+		strcpy(nomRetourne, "LO");
+	strcat(nomRetourne, ":");
+}
+
 //écrit dans le fichier les valeurs des registres en décimal
 void ecrireFichierState(char nomFichier[]) {
 	char ligne[TAILLE_LIGNE];
-	char reg[3];
-	char valRegistre[9]; //en hexa
-	FILE * fichier = fopen(nomFichier, "w");
+	char reg[10];
+	char valRegistre[10]; //en hexa
+
+	FILE * fichier = fopen(nomFichier, "w+");
 	for (char i = 0; i < 35; i++) {
-		if(i<32) {
-			strcpy(ligne, "$");
-			sprintf(reg, "%02d", i); //int to string
-			strcat(ligne, reg); //concaténations
-		}
-		else if(i == 32) {
-				i++;
-				strcpy(ligne, "HI");
-			}
-		else
-			strcpy(ligne, "LO");
-		
-		strcat(ligne, ":");
+		if(i == 32)
+			i++; //on skip PC
+		nomRegistre(reg, i);
+		strcpy(ligne, reg);
 		sprintf(valRegistre, "%d", lireRegistre(i));
 		strcat(ligne, valRegistre);
-		strcat(ligne, "\n");
 		ecrireLigneFichier(fichier, ligne);
 	}
-	
-	
 	fclose(fichier);
 }
