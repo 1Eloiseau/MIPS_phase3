@@ -163,7 +163,9 @@ void afficherRegistres() {
 	for (char i = 0; i < 7; i++) {
 		for (char j = 0; j < nbColonnes; j++) {
 			nomRegistre(nomReg, i*nbColonnes+j);
-			printf("%s %d    ", nomReg, lireRegistre(i*nbColonnes+j));
+			if((i*nbColonnes+j) > 31)
+				strcat(nomReg, " ");
+			printf("%s %4d          ", nomReg, lireRegistre(i*nbColonnes+j));
 		}
 		printf("\n");
 	}
@@ -175,7 +177,7 @@ void afficherMemoire() {
 	printf("MEMOIRE :\n");
 	for(int i = 0; i < 20; i++) {
 		for (int j = 0; j < nbColonnes; j++) {
-			printf("$%d: %x    ", (i*nbColonnes+j)*4, lireMemoire((i*nbColonnes+j)*4));
+			printf("@%4d: %4d      ", (i*nbColonnes+j)*4, lireMemoire((i*nbColonnes+j)*4));
 		}
 		printf("\n");
 	}
