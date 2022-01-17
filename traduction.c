@@ -1,4 +1,4 @@
-#include "fonctions.h"
+#include "traduction.h"
 
 //L est le tableau dans lequel le mot numero_mot sera stocké. Donc si on a ligne [] = 'ADD R0, R1, R2' et on écrit lecture_mot (ligne, L, 2), le mot R0 qui est le second mot sera stocké dans la variable L.
 
@@ -143,12 +143,12 @@ int offset_label(structLabel matrice_label[], char label[100], int nb_label) {
     int get_out = 0;
     int num_label = 0;
     int pos_label = -1;
-
-    while (num_label < nb_label && get_out != 1){
+    while (num_label <= nb_label && get_out != 1){
         if (!strcmp(matrice_label[num_label].label, label)) {
             get_out = 1;
             pos_label = matrice_label[num_label].numInstruction;
         } 
+        num_label += 1;
     }
     return (pos_label);
 }
@@ -189,8 +189,8 @@ void intEnChar(int instruction, char ligneHexa[]) {
 /*Puis à décalage de décaler en fonction des informations stocker dans matrice_csv*/
 /*Puis effectue un ou binaire entre chaque variable et le masque, lui aussi stocké dans matrice_csv*/
 /*Puis retourne le résultat*/
-int string_to_int (char operation[4][100], char matrice_csv[26][10][15], int ligne_matrice_csv, int num_inst, char * matrice_label[2], int nb_label) {
-    int inst_decimal = matrice_csv[ligne_matrice_csv][1];
+int string_to_int (char operation[4][100], char matrice_csv[26][10][15], int ligne_matrice_csv, int num_inst, structLabel matrice_label[], int nb_label) {
+    int inst_decimal = atoi(matrice_csv[ligne_matrice_csv][1]);
     int variable1 = 0;
     int variable2 = 0;
     int variable3 = 0;
@@ -262,22 +262,21 @@ int string_to_int (char operation[4][100], char matrice_csv[26][10][15], int lig
         }
     }
 
-    houla_ca_deborde(variable1, matrice_csv[ligne_matrice_csv][6]);
-    houla_ca_deborde(variable2, matrice_csv[ligne_matrice_csv][7]);
-    houla_ca_deborde(variable3, matrice_csv[ligne_matrice_csv][8]);
+    houla_ca_deborde(variable1, atoi(matrice_csv[ligne_matrice_csv][6]));
+    houla_ca_deborde(variable2, atoi(matrice_csv[ligne_matrice_csv][7]));
+    houla_ca_deborde(variable3, atoi(matrice_csv[ligne_matrice_csv][8]));
 
-    variable1 = decalage(variable1, matrice_csv[ligne_matrice_csv][2]);
-    variable2 = decalage(variable2, matrice_csv[ligne_matrice_csv][3]);
-    variable3 = decalage(variable3, matrice_csv[ligne_matrice_csv][4]);
+    variable1 = decalage(variable1, atoi(matrice_csv[ligne_matrice_csv][2]));
+    variable2 = decalage(variable2, atoi(matrice_csv[ligne_matrice_csv][3]));
+    variable3 = decalage(variable3, atoi(matrice_csv[ligne_matrice_csv][4]));
 
     inst_decimal = inst_decimal | variable1 | variable2 | variable3;
 
     return (inst_decimal);
 }
 
-int traduction_dec(char ligne[], int num_instruction, structLabel matrice_label[],char matrice_csv[26][10][15], int nb_label) {
+int traduction_dec(char ligne[], int num_instruction, structLabel matrice_label[], char matrice_csv[26][10][15], int nb_label) {
     char mot_ligne[4][100];
-    int type_op = 0;
     int ligne_csv = -1;
     int get_out = 0;
     int inst_dec;

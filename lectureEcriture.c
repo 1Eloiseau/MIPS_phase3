@@ -120,6 +120,64 @@ void lecture_csv(char matrice[26][10][15]) {
     fclose(fichier);
 }
 
+/*Testée et fonctionnelle*/
+void lecture_csv2(char tableur[], char matrice[16][4][7]) {
+
+    FILE *  fichier = fopen(tableur, "rt");
+    char ligne[50];
+    int num_ligne = 0;
+    int pos_loc = 0;
+    int indice_ligne = 0;
+    int num_mot = 0;
+    while (fgets(ligne, 50, fichier) != NULL)  {
+        while (ligne[indice_ligne] != '\0') {
+            while (ligne[indice_ligne] != ';' && ligne[indice_ligne] != '\0') {
+                matrice[num_ligne][num_mot][pos_loc] = ligne[indice_ligne];
+                indice_ligne += 1;
+                pos_loc += 1;
+            }
+            matrice[num_ligne][num_mot][pos_loc] = '\0';
+            indice_ligne += 1;
+            pos_loc = 0;
+            num_mot += 1;
+        }
+        num_ligne += 1;
+        num_mot = 0;
+        indice_ligne = 0;
+        
+    }
+    fclose(fichier);
+}
+
+/*Testée et fonctionnelle*/
+void lecture_csv_3(char tableur[], char matrice[10][7][7]) {
+
+    FILE *  fichier = fopen(tableur, "rt");
+    char ligne[50];
+    int num_ligne = 0;
+    int pos_loc = 0;
+    int indice_ligne = 0;
+    int num_mot = 0;
+    while (fgets(ligne, 50, fichier) != NULL)  {
+        while (ligne[indice_ligne] != '\0') {
+            while (ligne[indice_ligne] != ';' && ligne[indice_ligne] != '\0') {
+                matrice[num_ligne][num_mot][pos_loc] = ligne[indice_ligne];
+                indice_ligne += 1;
+                pos_loc += 1;
+            }
+            matrice[num_ligne][num_mot][pos_loc] = '\0';
+            indice_ligne += 1;
+            pos_loc = 0;
+            num_mot += 1;
+        }
+        num_ligne += 1;
+        num_mot = 0;
+        indice_ligne = 0;
+        
+    }
+    fclose(fichier);
+}
+
 //retourne dans le tableau le nom du registre ($01: ou LI: par exemple)
 void nomRegistre(char nomRetourne[], int numRegistre) {
 	char reg[4];
@@ -149,7 +207,7 @@ void ecrireFichierState(char nomFichier[]) {
 			i++; //on skip PC
 		nomRegistre(reg, i);
 		strcpy(ligne, reg);
-		sprintf(valRegistre, "%d", lireRegistre(i));
+		sprintf(valRegistre, "%d", lire_registre(i));
 		strcat(ligne, valRegistre);
 		ecrireLigneFichier(fichier, ligne);
 	}
@@ -165,7 +223,7 @@ void afficherRegistres() {
 			nomRegistre(nomReg, i*nbColonnes+j);
 			if((i*nbColonnes+j) > 31)
 				strcat(nomReg, " ");
-			printf("%s %4d          ", nomReg, lireRegistre(i*nbColonnes+j));
+			printf("%s %4d          ", nomReg, lire_registre(i*nbColonnes+j));
 		}
 		printf("\n");
 	}
