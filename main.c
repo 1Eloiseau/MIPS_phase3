@@ -12,7 +12,11 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	int nbLignes = 0;
 	int typeLigne = -1;
 	structLabel tabLabels[10]; //tableau liant labels et leur positions
-	char matriceCSV[26][10][15];
+	char matrice_csv1[26][10][15];
+	char matrice_csv_2[15][4][7];
+    char matrice_csv3[10][7][7];
+	char fichier_opcode_speciale[] = {"opcode_special.csv"};
+    char fichier_opcode[] = {"opcode.csv"};
 	int i_ligne = 0;
 	int i_instruction = 0;
 	int mode;
@@ -50,6 +54,9 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	printf("§\n");
 
 	lecture_csv(matriceCSV);
+	lecture_csv_2(fichier_opcode_speciale, matrice_csv_speciale);
+    lecture_csv_3(fichier_opcode, matrice_csv);
+	
 	printf("§\n");
 	tabRegistres[5] = -11;
 	ecrireFichierState(nomFichierRegistres);

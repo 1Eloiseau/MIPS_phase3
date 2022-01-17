@@ -121,7 +121,7 @@ void lecture_csv(char matrice[26][10][15]) {
 }
 
 /*Testée et fonctionnelle*/
-void lecture_csv2(char tableur[], char matrice[16][4][7]) {
+void lecture_csv2(char tableur[], char matrice[15][4][7]) {
 
     FILE *  fichier = fopen(tableur, "rt");
     char ligne[50];
