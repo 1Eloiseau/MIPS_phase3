@@ -9,7 +9,7 @@
 #include <stdbool.h>
 
 extern int tabRegistres[35]; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
-extern char tabMemoire[1000]; //octets de mémoire gros-boutiste
+extern char tabMemoire[400]; //octets de mémoire gros-boutiste
 
 typedef struct structLabel structLabel;
     struct structLabel{
@@ -20,6 +20,8 @@ typedef struct structLabel structLabel;
 //PENSER A DECRIRE LES FONCTIONS ICI AVANT LE RENDU
 void afficherRegistres();
 void afficherMemoire();
+int lireMemoire(int adresse);
+void ecrireMemoire(int adresse, int donnee);
 void ecrireFichierState(char nomFichier[]);
 
 int remplirTabLabels(FILE* fichier, structLabel* tabLablels);

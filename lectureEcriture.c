@@ -120,29 +120,6 @@ void lecture_csv(char matrice[26][10][15]) {
     fclose(fichier);
 }
 
-//affiche les registres sur le terminal
-void afficherRegistres() {
-	char nomReg[10];
-	printf("VALEUR DES REGISTRES :\n");
-	for (char i = 0; i < 6; i++) {
-		for (char i = 0; i < 4; i++) {
-			nomRegistre(nomReg, i);
-			printf("%s %d    ", nomReg, lireRegistre(i));
-		}
-		printf("\n");
-	}
-	for (char i = 32; i < 35; i++) {
-		nomRegistre(nomReg, i);
-		printf("%s %d   ", nomReg, lireRegistre(i));
-	}
-	printf("\n");
-}
-
-//affiche la mémoire sur le terminal
-void afficherMemoire() {
-
-}
-
 //retourne dans le tableau le nom du registre ($01: ou LI: par exemple)
 void nomRegistre(char nomRetourne[], int numRegistre) {
 	char reg[4];
@@ -177,4 +154,33 @@ void ecrireFichierState(char nomFichier[]) {
 		ecrireLigneFichier(fichier, ligne);
 	}
 	fclose(fichier);
+}
+//affiche les registres sur le terminal
+void afficherRegistres() {
+	char nomReg[10];
+	printf("VALEUR DES REGISTRES :\n");
+	for (char i = 0; i < 6; i++) {
+		for (char i = 0; i < 4; i++) {
+			nomRegistre(nomReg, i);
+			printf("%s %d    ", nomReg, lireRegistre(i));
+		}
+		printf("\n");
+	}
+	for (char i = 32; i < 35; i++) {
+		nomRegistre(nomReg, i);
+		printf("%s %d   ", nomReg, lireRegistre(i));
+	}
+	printf("\n");
+}
+
+//affiche la mémoire sur le terminal
+void afficherMemoire() {
+	int nbColonnes = 5;
+	printf("MEMOIRE :\n");
+	for(int i = 0; i < 20; i++) {
+		for (int j = 0; j < nbColonnes; j++) {
+			printf("$%d: %x    ", (i*nbColonnes+j)*4, lireMemoire((i*nbColonnes+j)*4));
+		}
+		printf("\n");
+	}
 }
