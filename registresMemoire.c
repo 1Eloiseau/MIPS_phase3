@@ -2,6 +2,19 @@
 extern int tabRegistres[35]; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
 extern char tabMemoire[1000]; //octets de mémoire gros-boutiste
 
+void ecrire_registre(int registres[], int num_registre, int var) {
+    int var_temp;
+
+    if (num_registre != 0) {
+        var_temp = var & 4294967296;  /*4294967296 = 2^32 - 1; le but est de faire en sorte que var ne dépasse pas 32 bits.*/
+        registres[num_registre] = var;
+    }
+}
+
+int lireRegistre(int num_registre) {
+    return (tabRegistres[num_registre]);
+}
+
 //renvoie le mot de 32 bits de l'adresse demandée
 int lireMemoire(int adresse) {
     int donnee = 0;

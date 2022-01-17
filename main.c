@@ -1,4 +1,6 @@
 #include "fonctions.h"
+int tabRegistres[35]; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
+char tabMemoire[1000]; //octets de mémoire gros-boutiste
 
 int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par exemple
 	char* nomFichierSource = argv[1];
@@ -6,8 +8,6 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 	char* nomFichierRegistres = argv[3]; //on y stocke la valeur des registres à la fin
 	char ligne[TAILLE_LIGNE];
 	char ligneHexa[9];
-	int tabRegistres[35]; //dans cet ordre : R0 - ... - R31 - PC - HI - LO
-	char tabMemoire[1000]; //octets de mémoire gros-boutiste
 	int nbLignes = 0;
 	int typeLigne = -1;
 	structLabel tabLabels[10]; //tableau liant labels et leur positions
@@ -18,7 +18,7 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 
 	//Ouvrir un fichier en écriture efface tout son contenu, cela permet d'avoir un fichier out directement nettoyé pour éviter de devoir le faire à chaque fois.
 	FILE * fichierSource = fopen(nomFichierSource, "r");
-	FILE * fichierDestination = fopen(nomFichierDestination, "a+");
+	FILE * fichierDestination = fopen(nomFichierDestination, "w+");
 	if(fichierSource == NULL) {
 		printf("Erreur dans l'ouverture du fichier %s :(  Existe-t-il ?\n", nomFichierSource);
 	}
@@ -28,7 +28,8 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 
 	lecture_csv(matriceCSV);
 	printf("§\n");
-
+	tabRegistres[5] = -11;
+	ecrireFichierState(nomFichierRegistres);
 	/*
 	while(lireLigneFichier(fichierSource, ligne) != 1) {
 		if(formaterLigne(ligne) == 0) { //ligne est une instruction
@@ -51,6 +52,7 @@ int main(int argc, char ** argv) { //  ./emul-mips in1.s in1.hex in1.state  par 
 		printf("formate : >%s< \n", ligne);
 	}
 */
+	printf("%d instructions écrites avec succès !", i_instruction);
 	fclose(fichierSource);
 	fclose(fichierDestination);
 	return (0);

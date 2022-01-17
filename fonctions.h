@@ -16,7 +16,11 @@ typedef struct structLabel structLabel;
 
 //PENSER A DECRIRE LES FONCTIONS ICI AVANT LE RENDU
 
+void ecrireFichierState(char nomFichier[]);
+
 int remplirTabLabels(FILE* fichier, structLabel* tabLablels);
+
+int lireRegistre(int num_registre);
 
 void lecture_csv(char matrice[26][10][15]);
 
